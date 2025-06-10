@@ -12,7 +12,7 @@ public class User
     private String password;
     private String email;
     private String role;   // Customer, Operator, Admin
-    private String status; // Active, Inactive
+    private String status; // check Active, Inactive
 
     // Constructor
     public User(int userId, String username, String password, String email , String role, String status)
