@@ -55,7 +55,8 @@ public class SignUpForm extends JFrame
         messageLabel.setBounds(30, 230, 300, 25);
         add(messageLabel);
 
-        registerButton.addActionListener(e -> {
+        registerButton.addActionListener(e -> 
+        {
             String username = usernameField.getText();
             String password = new String(passwordField.getPassword());
             String email = emailField.getText();
@@ -65,7 +66,8 @@ public class SignUpForm extends JFrame
             User newUser = new User(username, password, email, role, status);
             boolean success = UserService.register(newUser);
 
-            if (success) {
+            if (success) 
+            {
                 messageLabel.setText("✅ Registration successful!");
                 usernameField.setText("");
                 passwordField.setText("");
