@@ -8,6 +8,8 @@ package services;
 import database.DBConnection;
 import models.User;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserService
 { 
@@ -35,30 +37,62 @@ public class UserService
     }
 
 // Login user
-    public static User login(String username, String password) throws SQLException
-    {
-        Connection conn = DBConnection.getInstance().getConnection();
-        String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
-            PreparedStatement stmt = conn.prepareStatement(sql);
+    public static User login(String username, String password) throws SQLException {
+        String sql = "SELECT * FROM users WHERE username = ? AND password = ? AND status = 'Active'";
+        try (Connection conn = DBConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
             stmt.setString(1, username);
             stmt.setString(2, password);
 
             ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new User(
+                        rs.getInt("user_id"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getString("email"),
+                        rs.getString("role"),
+                        rs.getString("status")
+                );
+            }
+        }
+        return null;
+    }
 
-            if (rs.next()) 
-                {
-                    int userId = rs.getInt("user_id"); // or whatever your column is named
-                    String email = rs.getString("email");
-                    String role = rs.getString("role");
-                    String status = rs.getString("status");
-                    
-                    // Return the valid user        
-                    return new User(userId, username, password, email, role, status); 
-                }
-            
-            return null;  // login failed
-    } 
+    // Get all customers (for operator booking)
+    public static List<User> getAllCustomers()
+    {
+        List<User> customers = new ArrayList<>();
+        String sql = "SELECT * FROM users WHERE role = 'Customer' AND status = 'Active'";
+
+        try (Connection conn = DBConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) 
+            {
+                User user = new User(
+                        rs.getInt("user_id"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getString("email"),
+                        rs.getString("role"),
+                        rs.getString("status")
+                );
+                customers.add(user);
+            }
+
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+        }
+
+        return customers;
+    }
 }
-    
+
+   
   
 
