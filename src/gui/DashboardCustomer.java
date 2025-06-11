@@ -22,11 +22,15 @@ public class DashboardCustomer extends JFrame
         add(new JButton("View Flights"));
         add(new JButton("Book Flight"));
         add(new JButton("My Bookings"));
-        add(new JButton("Logout")).addActionListener(e -> 
+        
+        JButton logoutButton = new JButton("Logout");
+        logoutButton.addActionListener(e -> 
         {
             new LoginForm();
             dispose();
         });
+        
+        add(logoutButton);
 
         setVisible(true);
     }
