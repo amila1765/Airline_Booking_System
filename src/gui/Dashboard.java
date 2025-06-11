@@ -14,12 +14,12 @@ public class Dashboard extends JFrame
    public Dashboard() 
    {
         setTitle("Airline Ticket Booking Dashboard");
-        setSize(400,300);
+        setSize(800,600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new FlowLayout());
 
-                JLabel welcomeLabel = new JLabel("Welcome to the Airline Booking System");
+        JLabel welcomeLabel = new JLabel("Welcome to the Airline Booking System");
         add(welcomeLabel);
 
         JButton loginButton = new JButton("Login");
