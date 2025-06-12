@@ -27,7 +27,7 @@ public class BookingForm extends JFrame
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
-        // Header
+        // Title
         add(Box.createVerticalStrut(10));
         JLabel flightLabel = new JLabel("Booking for Flight ID: " + selectedFlight.getFlightId());
         flightLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -55,7 +55,7 @@ public class BookingForm extends JFrame
             add(userPanel);
         }
 
-        // Confirm booking
+        // book button
         JButton bookButton = new JButton("Confirm Booking");
         bookButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         add(Box.createVerticalStrut(20));
