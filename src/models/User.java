@@ -86,13 +86,9 @@ public class User
 
     // toString method
     @Override
-    public String toString() {
-        return "User{" +
-                "userId=" + userId +
-                ", username='" + username + '\'' +
-                ", email='" + email + '\'' +
-                ", role='" + role + '\'' +
-                ", status='" + status + '\'' +
-                '}';
-    }
+        public String toString() 
+        {
+        return username;
+        }
+
 }
