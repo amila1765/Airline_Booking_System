@@ -22,16 +22,20 @@ public class Booking
         this.seatClass = seatClass;
         this.bookingDate = bookingDate;
     }
+    
+    public Booking(int bookingId, int userId, int flightId, String seatClass, Timestamp bookingDate) 
+    {
+        this.bookingId = bookingId;
+        this.userId = userId;
+        this.flightId = flightId;
+        this.seatClass = seatClass;
+        this.bookingDate = bookingDate;
+    }
 
     public int getBookingId() { return bookingId; }
     public int getUserId() { return userId; }
     public int getFlightId() { return flightId; }
     public String getSeatClass() { return seatClass; }
-    public Timestamp getBookingDate() { return bookingDate; }
-
-    @Override
-    public String toString()
-    {
-        return "Booking " + bookingId + " | User: " + userId + " | Flight: " + flightId;
+    public Timestamp getBookingDate() { return bookingDate; 
     }
 }
