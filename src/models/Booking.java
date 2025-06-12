@@ -1,7 +1,7 @@
 
 package models;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 /**
  *
@@ -9,14 +9,14 @@ import java.time.LocalDateTime;
  */
 public class Booking 
 {
-     private int bookingId;
+    private int bookingId;
     private int userId;
     private int flightId;
     private String seatClass;
-    private LocalDateTime bookingDate;
+    private Timestamp bookingDate;
 
-    public Booking(int bookingId, int userId, int flightId, String seatClass, LocalDateTime bookingDate) {
-        this.bookingId = bookingId;
+    public Booking(int userId, int flightId, String seatClass, Timestamp bookingDate) 
+    {
         this.userId = userId;
         this.flightId = flightId;
         this.seatClass = seatClass;
@@ -27,7 +27,7 @@ public class Booking
     public int getUserId() { return userId; }
     public int getFlightId() { return flightId; }
     public String getSeatClass() { return seatClass; }
-    public LocalDateTime getBookingDate() { return bookingDate; }
+    public Timestamp getBookingDate() { return bookingDate; }
 
     @Override
     public String toString()
