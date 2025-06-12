@@ -57,7 +57,6 @@ public class FlightSearchForm extends JFrame
         String[] columnNames = {"Flight ID", "Airplane ID", "Departure Time", "Arrival Time"};
         tableModel = new DefaultTableModel(columnNames, 0);
         flightTable = new JTable(tableModel);
-        JScrollPane scrollPane = new JScrollPane(flightTable);
         add(scrollPane, BorderLayout.CENTER);
         
         // Bottom panel for Book button
@@ -89,7 +88,7 @@ public class FlightSearchForm extends JFrame
 
         flightList = FlightService.getFlightsByRoute(originId, destinationId);
 
-        if (flights.isEmpty()) 
+        if (flightList.isEmpty()) 
         {
             JOptionPane.showMessageDialog(this, "No flights found for the selected route.");
         } 
