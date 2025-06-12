@@ -54,9 +54,27 @@ public class LoginForm extends JFrame
             try {
                 User loggedInUser = userService.login(username, password);
 
-                if (loggedInUser != null) {
+                if (loggedInUser != null) 
+                {
                     messageLabel.setText("✅ Welcome, " + loggedInUser.getUsername());
                     // Proceed to dashboard or user panel
+                    
+                    dispose(); // Close login form
+
+                switch (loggedInUser.getRole()) 
+                {
+                case "Customer":
+                new DashboardCustomer(loggedInUser);
+                break;
+                case "Operator":
+                new DashboardOperator(loggedInUser);
+                break;
+                case "Admin":
+                new DashboardAdmin(loggedInUser);
+                break;
+                default:
+                JOptionPane.showMessageDialog(this, "Unknown user role.");
+                }
                 }
                 else 
                 {
