@@ -8,35 +8,38 @@ package services;
 
 import database.DBConnection;
 import models.Booking;
-import java.sql.*;
-import java.util.ArrayList;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class BookingService 
 {
-   private Connection conn;
-
-    public BookingService() throws SQLException 
+   // Register a new booking
+    public static boolean register(Booking booking) 
     {
-        conn = DBConnection.getInstance().getConnection();
+        String sql = "INSERT INTO bookings (user_id, flight_id, seat_class, booking_date) VALUES (?, ?, ?, ?)";
+
+        try (Connection conn = DBConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) 
+        {
+
+            stmt.setInt(1, booking.getUserId());
+            stmt.setInt(2, booking.getFlightId());
+            stmt.setString(3, booking.getSeatClass());
+            stmt.setTimestamp(4, booking.getBookingDate());
+
+            stmt.executeUpdate();
+            return true;
+
+        } catch (SQLException e) {
+            System.err.println("Booking insertion failed: " + e.getMessage());
+            return false;
+        }
     }
 
-    public boolean bookFlight(Booking booking) 
-    {
-        // Add booking after checking seat availability
-        return false;
-    }
-
-    public ArrayList<Booking> getBookingsByUser(int userId) 
-    {
-        // Retrieve bookings for specific user
-        return new ArrayList<>();
-    }
-
-    public boolean isSeatAvailable(int flightId, String seatClass) 
-    {
-        // Count booked seats and compare with capacity
-        return false;
-    }
+    // You can add more functions later like:
+    // - getBookingsByUser(int userId)
+    // - getAllBookings()
+    // - deleteBooking(int bookingId)
+    // - getPassengerManifest(int flightId)
 }
- 
-
