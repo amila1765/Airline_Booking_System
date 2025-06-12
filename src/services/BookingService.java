@@ -11,9 +11,14 @@ import models.Booking;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.sql.ResultSet;
 
 public class BookingService 
-{
+{ 
+    private int bookingId;
+    
    // Register a new booking
     public static boolean register(Booking booking) 
     {
@@ -31,11 +36,43 @@ public class BookingService
             stmt.executeUpdate();
             return true;
 
-        } catch (SQLException e) {
+        } catch (SQLException e) 
+        {
             System.err.println("Booking insertion failed: " + e.getMessage());
             return false;
         }
     }
+    
+    public static List<Booking> getAllBookings() 
+    {
+    List<Booking> bookings = new ArrayList<>();
+    String sql = "SELECT * FROM bookings";
+
+    try (Connection conn = DBConnection.getInstance().getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql);
+         ResultSet rs = stmt.executeQuery()) 
+    {
+
+        while (rs.next()) 
+        {
+            Booking booking = new Booking(
+                    rs.getInt("booking_id"),
+                    rs.getInt("user_id"),
+                    rs.getInt("flight_id"),
+                    rs.getString("seat_class"),
+                    rs.getTimestamp("booking_date")
+            );
+            bookings.add(booking);
+        }
+
+    } catch (SQLException e)
+    {
+        e.printStackTrace();
+    }
+
+    return bookings;
+}
+
 
     // You can add more functions later like:
     // - getBookingsByUser(int userId)
