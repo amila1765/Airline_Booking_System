@@ -91,6 +91,58 @@ public class UserService
 
         return customers;
     }
+    
+    public static List<User> getAllUsers() 
+    {
+    List<User> userList = new ArrayList<>();
+    String sql = "SELECT * FROM users";
+
+    try (Connection conn = DBConnection.getInstance().getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql);
+         ResultSet rs = stmt.executeQuery()) 
+    {
+
+        while (rs.next()) 
+        {
+            User user = new User(
+                    rs.getInt("user_id"),
+                    rs.getString("username"),
+                    rs.getString("password"),
+                    rs.getString("email"),
+                    rs.getString("role"),
+                    rs.getString("status")
+            );
+            userList.add(user);
+        }
+
+    } 
+    catch (SQLException e) 
+    {
+        e.printStackTrace();
+    }
+
+    return userList;
+}
+
+    
+    public static boolean deactivateUser(int userId) 
+    {
+    String sql = "UPDATE users SET status = 'Inactive' WHERE user_id = ?";
+    try (Connection conn = DBConnection.getInstance().getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) 
+    {
+
+        stmt.setInt(1, userId);
+        return stmt.executeUpdate() > 0;
+
+    } 
+    catch (SQLException e) 
+    {
+        e.printStackTrace();
+        return false;
+    }
+}
+
 }
 
    
