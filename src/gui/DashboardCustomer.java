@@ -28,7 +28,7 @@ public class DashboardCustomer extends JFrame
         // Search Flights Button
         JButton searchFlightsButton = new JButton("🔍 Search Flights");
         searchFlightsButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        searchFlightsButton.addActionListener(e -> new FlightSearchForm());
+        searchFlightsButton.addActionListener(e -> new FlightSearchForm(user));
         add(searchFlightsButton);
         add(Box.createVerticalStrut(10));
 
