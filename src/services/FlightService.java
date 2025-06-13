@@ -29,6 +29,7 @@ public class FlightService
 
             while (rs.next()) 
             {
+                System.out.println("✅ Found flight: " + rs.getInt("flight_id"));
                 Flight flight = new Flight(
                         rs.getInt("flight_id"),
                         rs.getInt("airplane_id"),
@@ -42,7 +43,7 @@ public class FlightService
 
         } catch (SQLException e) 
         {
-            e.printStackTrace();
+            System.err.println("❌ Error in getFlightsByRoute: " + e.getMessage());
         }
 
         return flights;
