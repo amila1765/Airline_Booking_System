@@ -72,11 +72,44 @@ public class BookingService
 
     return bookings;
 }
+    
+    public static List<Booking> getBookingsByUser(int userId) 
+    {
+    List<Booking> list = new ArrayList<>();
+    String sql = "SELECT * FROM bookings WHERE user_id = ?";
+
+    try (Connection conn = DBConnection.getInstance().getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql))
+    {
+
+        stmt.setInt(1, userId);
+        ResultSet rs = stmt.executeQuery();
+
+        while (rs.next()) 
+        {
+            Booking booking = new Booking(
+                    rs.getInt("booking_id"),
+                    rs.getInt("user_id"),
+                    rs.getInt("flight_id"),
+                    rs.getString("seat_class"),
+                    rs.getTimestamp("booking_date")
+            );
+            list.add(booking);
+        }
+
+    } 
+    catch (SQLException e) 
+    {
+        e.printStackTrace();
+    }
+
+    return list;
+}
+
 
 
     // You can add more functions later like:
-    // - getBookingsByUser(int userId)
-    // - getAllBookings()
+
     // - deleteBooking(int bookingId)
     // - getPassengerManifest(int flightId)
 }
