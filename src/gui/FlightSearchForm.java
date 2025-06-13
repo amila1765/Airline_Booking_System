@@ -34,17 +34,11 @@ public class FlightSearchForm extends JFrame
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
         
-         // Top panel for dropdowns
-        JPanel topPanel = new JPanel();
-        topPanel.setLayout(new FlowLayout());
-
+         // Top panel for dropdowns and search
+        JPanel topPanel = new JPanel(new FlowLayout());
         originCombo = new JComboBox<>(new String[]{"1 - Colombo", "2 - London", "3 - Dubai"});
         destinationCombo = new JComboBox<>(new String[]{"1 - Colombo", "2 - London", "3 - Dubai"});
         JButton searchButton = new JButton("Search Flights");
-
-        tableModel = new DefaultTableModel(new String[]{"Flight ID", "Airplane ID", "Dep Time", "Arr Time"}, 0);
-        flightTable = new JTable(tableModel);
-        JScrollPane scrollPane = new JScrollPane(flightTable);
 
         topPanel.add(new JLabel("From:"));
         topPanel.add(originCombo);
@@ -53,13 +47,14 @@ public class FlightSearchForm extends JFrame
         topPanel.add(searchButton);
         add(topPanel, BorderLayout.NORTH);
         
-         // Table for showing flights
+         // Table and scroll pane
         String[] columnNames = {"Flight ID", "Airplane ID", "Departure Time", "Arrival Time"};
         tableModel = new DefaultTableModel(columnNames, 0);
         flightTable = new JTable(tableModel);
+        JScrollPane scrollPane = new JScrollPane(flightTable);
         add(scrollPane, BorderLayout.CENTER);
         
-        // Bottom panel for Book button
+        // Bottom panel for Booking
         JPanel bottomPanel = new JPanel();
         JButton bookButton = new JButton("Book Selected Flight");
         bottomPanel.add(bookButton);
@@ -85,7 +80,8 @@ public class FlightSearchForm extends JFrame
             JOptionPane.showMessageDialog(this, "Origin and destination cannot be the same.");
             return;
         }
-
+        
+        System.out.println("Searching flights from " + originId + " to " + destinationId);
         flightList = FlightService.getFlightsByRoute(originId, destinationId);
 
         if (flightList.isEmpty()) 
