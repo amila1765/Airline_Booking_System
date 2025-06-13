@@ -26,20 +26,14 @@ public class DashboardCustomer extends JFrame
         add(Box.createVerticalStrut(20));
 
         // Search Flights Button
-        JButton searchFlightsButton = new JButton("🔍 Search Flights");
+        JButton searchFlightsButton = new JButton("🔍 Book My Flight");
         searchFlightsButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         searchFlightsButton.addActionListener(e -> new FlightSearchForm(user));
         add(searchFlightsButton);
         add(Box.createVerticalStrut(10));
 
-        // Placeholder Book Flight Button
-        JButton bookFlightButton = new JButton("🎟 Book Flight (Coming soon)");
-        bookFlightButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        add(bookFlightButton);
-        add(Box.createVerticalStrut(10));
-
         // Placeholder My Bookings Button
-        JButton myBookingsButton = new JButton("📋 My Bookings (Coming soon)");
+        JButton myBookingsButton = new JButton("📋 My Bookings");
         myBookingsButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         add(myBookingsButton);
         add(Box.createVerticalStrut(10));
