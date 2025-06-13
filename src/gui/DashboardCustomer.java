@@ -35,9 +35,10 @@ public class DashboardCustomer extends JFrame
         // Placeholder My Bookings Button
         JButton myBookingsButton = new JButton("📋 My Bookings");
         myBookingsButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        myBookingsButton.addActionListener(e -> new MyBookingsForm(user));
         add(myBookingsButton);
         add(Box.createVerticalStrut(10));
-
+        
         // Logout Button
         JButton logoutButton = new JButton("🔓 Logout");
         logoutButton.setAlignmentX(Component.CENTER_ALIGNMENT);
