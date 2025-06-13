@@ -16,7 +16,8 @@ public class Flight
     private LocalDateTime departureTime;
     private LocalDateTime arrivalTime;
 
-    public Flight(int flightId, int airplaneId, int departureAirportId, int arrivalAirportId, LocalDateTime departureTime, LocalDateTime arrivalTime) {
+    public Flight(int flightId, int airplaneId, int departureAirportId, int arrivalAirportId, LocalDateTime departureTime, LocalDateTime arrivalTime) 
+    {
         this.flightId = flightId;
         this.airplaneId = airplaneId;
         this.departureAirportId = departureAirportId;
