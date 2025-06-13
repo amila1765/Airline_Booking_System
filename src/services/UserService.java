@@ -24,7 +24,7 @@ public class UserService
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getPassword());
             stmt.setString(3, user.getEmail());
-            stmt.setString(3, user.getRole());
+            stmt.setString(4, user.getRole());
             stmt.setString(5, user.getStatus());
             stmt.executeUpdate();
             return true;
