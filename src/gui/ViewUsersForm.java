@@ -108,17 +108,18 @@ public class ViewUsersForm extends JFrame
         //Toggle Status
         toggleStatusBtn.addActionListener(e -> 
         {
-            int row = userTable.getSelectedRow();
-            if (row >= 0) {
-                int userId = (int) tableModel.getValueAt(row, 0);
-                String currentStatus = (String) tableModel.getValueAt(row, 4);
+            int selectedRow = userTable.getSelectedRow();
+            if (selectedRow >= 0) {
+                int userId = (int) tableModel.getValueAt(selectedRow, 0);
+                String currentStatus = (String) tableModel.getValueAt(selectedRow, 4);
                 String newStatus = currentStatus.equals("Active") ? "Inactive" : "Active";
-
-                if (UserService.updateUserStatus(userId, newStatus)) 
+                boolean success = UserService.updateUserStatus(userId, newStatus);
+                if (success)
                 {
                     JOptionPane.showMessageDialog(this, "🔄 Status updated to " + newStatus);
                     loadUsers();
-                } else {
+                } else 
+                {
                     JOptionPane.showMessageDialog(this, "❌ Failed to update status.");
                 }
             } 
