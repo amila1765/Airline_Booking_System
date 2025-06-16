@@ -126,18 +126,16 @@ public class UserService
 }
     
     //update user(admin use)
-    public static boolean updateUser(User user) 
+    public static boolean updateUserStatus(int userId, String newStatus) 
     {
-    String sql = "UPDATE users SET username = ?, email = ?, role = ?, status = ? WHERE user_id = ?";
+    String sql = "UPDATE users SET status = ? WHERE user_id = ?";
     try (Connection conn = DBConnection.getInstance().getConnection();
          PreparedStatement stmt = conn.prepareStatement(sql)) 
     {
 
-        stmt.setString(1, user.getUsername());
-        stmt.setString(2, user.getEmail());
-        stmt.setString(3, user.getRole());
-        stmt.setString(4, user.getStatus());
-        stmt.setInt(5, user.getUserId());
+        stmt.setString(1, newStatus);
+        stmt.setInt(2, userId);
+        
 
         return stmt.executeUpdate() > 0;
 
@@ -166,13 +164,13 @@ public class UserService
 }
 
     //Deactivate user
-    public static boolean deactivateUser(int userId) 
+    public static boolean deactivateUser(int userId, String newStatus) 
     {
     String sql = "UPDATE users SET status = 'Inactive' WHERE user_id = ?";
     try (Connection conn = DBConnection.getInstance().getConnection();
          PreparedStatement stmt = conn.prepareStatement(sql)) 
     {
-
+        stmt.setString(1, newStatus);
         stmt.setInt(1, userId);
         return stmt.executeUpdate() > 0;
 
@@ -183,10 +181,6 @@ public class UserService
         return false;
     }
 }
-
-    public static boolean updateUserStatus(int userId, String newStatus) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 
 }
 
