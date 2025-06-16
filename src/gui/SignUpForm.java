@@ -6,7 +6,22 @@ import services.UserService;
 
 public class SignUpForm extends JFrame 
 {
+    private Runnable onUserAddedCallback; //callback to refresh user table
+
+    //Constructor with optional callback
+    public SignUpForm(Runnable onUserAddedCallback) 
+    {
+        this.onUserAddedCallback = onUserAddedCallback;
+        SetUpForm(); //build GUI
+    }
+
+    // Overloaded constructor for regular use
     public SignUpForm() 
+    {
+        this(null);
+    }
+    
+    private void SetUpForm() 
     {
         setTitle("Sign Up");
         setSize(350, 300);
@@ -55,7 +70,7 @@ public class SignUpForm extends JFrame
         messageLabel.setBounds(30, 230, 300, 25);
         add(messageLabel);
 
-        registerButton.addActionListener(e -> 
+        registerButton.addActionListener(e -> //register option
         {
             String username = usernameField.getText();
             String password = new String(passwordField.getPassword());
@@ -68,11 +83,15 @@ public class SignUpForm extends JFrame
 
             if (success) 
             {
-                messageLabel.setText("✅ Registration successful!");
-                usernameField.setText("");
-                passwordField.setText("");
-                emailField.setText("");
-                roleCombo.setSelectedIndex(0);
+                 messageLabel.setText("✅ Registration successful!");
+
+                //Refresh user table
+                if (onUserAddedCallback != null) 
+                {
+                    onUserAddedCallback.run();
+                }
+
+                dispose(); //Auto-close signup form
             } else {
                 messageLabel.setText("❌ Registration failed!");
             }
@@ -80,6 +99,7 @@ public class SignUpForm extends JFrame
 
         setVisible(true);
     }
+    
 }
 
     
