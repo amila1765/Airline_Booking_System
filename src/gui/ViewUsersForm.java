@@ -54,27 +54,29 @@ public class ViewUsersForm extends JFrame
         loadUsers();
         
          //Add User
-        addUserBtn.addActionListener(e -> 
-        {
-             SignUpForm signup = new SignUpForm(()->
-                 {
-                    loadUsers(); //refresh table
-                 });
-        });    
+        addUserBtn.addActionListener(e -> new SignUpForm(this::loadUsers));   
         
-        //Update User (basic, opens pre-filled SignUpForm-style dialog – extendable)
+        //Update User
         updateUserBtn.addActionListener(e -> 
         {
-            int row = userTable.getSelectedRow();
-            if (row >= 0)
-            {
-                int userId = (int) tableModel.getValueAt(row, 0);
-                JOptionPane.showMessageDialog(this, "✅ Update not implemented. You selected user ID: " + userId);
-                // 👉 Extend: open a form like SignUpForm with fields pre-filled
-            } else {
-                JOptionPane.showMessageDialog(this, "❗ Please select a user to update.");
-            }
-        });
+                int row = userTable.getSelectedRow();
+        if (row >= 0) 
+        {
+        int userId = (int) tableModel.getValueAt(row, 0);
+        String username = (String) tableModel.getValueAt(row, 1);
+        String email = (String) tableModel.getValueAt(row, 2);
+        String role = (String) tableModel.getValueAt(row, 3);
+        String status = (String) tableModel.getValueAt(row, 4);
+
+        // Reconstruct a User object
+        User selectedUser = new User(userId, username, "", email, role, status);
+        new UpdateUserForm(selectedUser, this::loadUsers);
+        } 
+        else 
+        {
+        JOptionPane.showMessageDialog(this, "❗ Please select a user to update.");
+    }
+    });
         
         //Delete User
         deleteUserBtn.addActionListener(e -> 
@@ -104,20 +106,24 @@ public class ViewUsersForm extends JFrame
         });
         
         //Toggle Status
-        toggleStatusBtn.addActionListener(e -> {
+        toggleStatusBtn.addActionListener(e -> 
+        {
             int row = userTable.getSelectedRow();
             if (row >= 0) {
                 int userId = (int) tableModel.getValueAt(row, 0);
                 String currentStatus = (String) tableModel.getValueAt(row, 4);
                 String newStatus = currentStatus.equals("Active") ? "Inactive" : "Active";
 
-                if (UserService.updateUserStatus(userId, newStatus)) {
+                if (UserService.updateUserStatus(userId, newStatus)) 
+                {
                     JOptionPane.showMessageDialog(this, "🔄 Status updated to " + newStatus);
                     loadUsers();
                 } else {
                     JOptionPane.showMessageDialog(this, "❌ Failed to update status.");
                 }
-            } else {
+            } 
+            else
+            {
                 JOptionPane.showMessageDialog(this, "❗ Select a user first.");
             }
         });
@@ -125,10 +131,12 @@ public class ViewUsersForm extends JFrame
         setVisible(true);
     }
 
-    private void loadUsers() {
+    private void loadUsers() 
+    {
         tableModel.setRowCount(0);
         List<User> users = UserService.getAllUsers();
-        for (User u : users) {
+        for (User u : users) 
+        {
             tableModel.addRow(new Object[]{
                     u.getUserId(),
                     u.getUsername(),
