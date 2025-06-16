@@ -4,9 +4,6 @@ package gui;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Properties;
-import org.jdatepicker.impl.*;
-
 
 public class HomeDashboard extends JFrame 
 {
@@ -32,11 +29,13 @@ public class HomeDashboard extends JFrame
 
         JButton homeBtn = new JButton("Home");
         JButton bookBtn = new JButton("Book Flight");
-        JButton statusBtn = new JButton("Flight Status");
         JButton loginBtn = new JButton("Login");
-        JButton signupBtn = new JButton("Sign Up");
+        loginBtn.addActionListener(e -> new LoginForm());
 
-        JButton[] navButtons = {homeBtn, bookBtn, statusBtn, loginBtn, signupBtn};
+        JButton signupBtn = new JButton("Sign Up");
+        signupBtn.addActionListener(e -> new SignUpForm());
+
+        JButton[] navButtons = {homeBtn, bookBtn, loginBtn, signupBtn};
         for (JButton btn : navButtons) {
             btn.setFocusPainted(false);
             headerPanel.add(btn);
