@@ -92,6 +92,7 @@ public class UserService
         return customers;
     }
     
+    // Get all users (for admin use)
     public static List<User> getAllUsers() 
     {
     List<User> userList = new ArrayList<>();
@@ -123,8 +124,41 @@ public class UserService
 
     return userList;
 }
-
     
+    //update user(admin use)
+    public static boolean updateUserStatus(int userId, String newStatus) 
+    {
+    String sql = "UPDATE users SET status = ? WHERE user_id = ?";
+    try (Connection conn = DBConnection.getInstance().getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) 
+    {
+        stmt.setString(1, newStatus);
+        stmt.setInt(2, userId);
+        return stmt.executeUpdate() > 0;
+    } catch (SQLException e) 
+    {
+        e.printStackTrace();
+        return false;
+    }
+}
+    
+    //delete user(admin use)
+    public static boolean deleteUser(int userId) 
+    {
+    String sql = "DELETE FROM users WHERE user_id = ?";
+    try (Connection conn = DBConnection.getInstance().getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql))
+    {
+        stmt.setInt(1, userId);
+        return stmt.executeUpdate() > 0;
+    } catch (SQLException e) 
+    {
+        e.printStackTrace();
+        return false;
+    }
+}
+
+    //Deactivate user
     public static boolean deactivateUser(int userId) 
     {
     String sql = "UPDATE users SET status = 'Inactive' WHERE user_id = ?";
