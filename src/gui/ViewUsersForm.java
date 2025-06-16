@@ -23,7 +23,7 @@ public class ViewUsersForm extends JFrame
     public ViewUsersForm()
     {
         setTitle("View All Users");
-        setSize(600, 400);
+        setSize(800, 400);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
@@ -34,75 +34,110 @@ public class ViewUsersForm extends JFrame
         userTable = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(userTable);
         add(scrollPane, BorderLayout.CENTER);
+        
+        // Action Panel
+        JPanel actionPanel = new JPanel(new FlowLayout());
+
+        JButton addUserBtn = new JButton("➕ Add User");
+        JButton updateUserBtn = new JButton("📝 Update User");
+        JButton deleteUserBtn = new JButton("🗑 Delete User");
+        JButton toggleStatusBtn = new JButton("🔄 Activate/Deactivate");
+
+        actionPanel.add(addUserBtn);
+        actionPanel.add(updateUserBtn);
+        actionPanel.add(deleteUserBtn);
+        actionPanel.add(toggleStatusBtn);
+
+        add(actionPanel, BorderLayout.SOUTH);
 
         // Load data
         loadUsers();
+        
+         //Add User
+        addUserBtn.addActionListener(e -> 
+        {
+             SignUpForm signup = new SignUpForm(()->
+                 {
+                    loadUsers(); //refresh table
+                 });
+        });    
+        
+        //Update User (basic, opens pre-filled SignUpForm-style dialog – extendable)
+        updateUserBtn.addActionListener(e -> 
+        {
+            int row = userTable.getSelectedRow();
+            if (row >= 0)
+            {
+                int userId = (int) tableModel.getValueAt(row, 0);
+                JOptionPane.showMessageDialog(this, "✅ Update not implemented. You selected user ID: " + userId);
+                // 👉 Extend: open a form like SignUpForm with fields pre-filled
+            } else {
+                JOptionPane.showMessageDialog(this, "❗ Please select a user to update.");
+            }
+        });
+        
+        //Delete User
+        deleteUserBtn.addActionListener(e -> 
+        {
+            int row = userTable.getSelectedRow();
+            if (row >= 0) 
+            {
+                int userId = (int) tableModel.getValueAt(row, 0);
+                int confirm = JOptionPane.showConfirmDialog(this, "Are you sure?", "Delete User", JOptionPane.YES_NO_OPTION);
+                if (confirm == JOptionPane.YES_OPTION)
+                {
+                    if (UserService.deleteUser(userId)) 
+                    {
+                        JOptionPane.showMessageDialog(this, "🗑 User deleted.");
+                        loadUsers();
+                    } 
+                    else 
+                    {
+                        JOptionPane.showMessageDialog(this, "❌ Failed to delete.");
+                    }
+                }
+            } 
+            else 
+            {
+                JOptionPane.showMessageDialog(this, "❗ Select a user first.");
+            }
+        });
+        
+        //Toggle Status
+        toggleStatusBtn.addActionListener(e -> {
+            int row = userTable.getSelectedRow();
+            if (row >= 0) {
+                int userId = (int) tableModel.getValueAt(row, 0);
+                String currentStatus = (String) tableModel.getValueAt(row, 4);
+                String newStatus = currentStatus.equals("Active") ? "Inactive" : "Active";
 
-        // Button panel
-        JPanel buttonPanel = new JPanel();
-        JButton deactivateBtn = new JButton("Deactivate Selected User");
-        buttonPanel.add(deactivateBtn);
-        add(buttonPanel, BorderLayout.SOUTH);
-
-        // Button action
-        deactivateBtn.addActionListener(e -> deactivateUser());
-
+                if (UserService.updateUserStatus(userId, newStatus)) {
+                    JOptionPane.showMessageDialog(this, "🔄 Status updated to " + newStatus);
+                    loadUsers();
+                } else {
+                    JOptionPane.showMessageDialog(this, "❌ Failed to update status.");
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "❗ Select a user first.");
+            }
+        });
+        
         setVisible(true);
     }
 
-    private void loadUsers() 
-    {
-        tableModel.setRowCount(0); // Clear table
+    private void loadUsers() {
+        tableModel.setRowCount(0);
         List<User> users = UserService.getAllUsers();
-
-        for (User user : users) 
-        {
-            tableModel.addRow(new Object[]
-            {
-                    user.getUserId(),
-                    user.getUsername(),
-                    user.getEmail(),
-                    user.getRole(),
-                    user.getStatus()
+        for (User u : users) {
+            tableModel.addRow(new Object[]{
+                    u.getUserId(),
+                    u.getUsername(),
+                    u.getEmail(),
+                    u.getRole(),
+                    u.getStatus()
             });
-        }
-    }
-
-    private void deactivateUser() 
-    {
-        int selectedRow = userTable.getSelectedRow();
-
-        if (selectedRow == -1) 
-        {
-            JOptionPane.showMessageDialog(this, "Select a user first.");
-            return;
-        }
-
-        int userId = (int) tableModel.getValueAt(selectedRow, 0);
-        String status = (String) tableModel.getValueAt(selectedRow, 4);
-
-        if (status.equals("Inactive")) 
-        {
-            JOptionPane.showMessageDialog(this, "User is already inactive.");
-            return;
-        }
-
-        int confirm = JOptionPane.showConfirmDialog(this,
-                "Are you sure you want to deactivate this user?",
-                "Confirm Deactivation", JOptionPane.YES_NO_OPTION);
-
-        if (confirm == JOptionPane.YES_OPTION) 
-        {
-            boolean success = UserService.deactivateUser(userId);
-
-            if (success) {
-                JOptionPane.showMessageDialog(this, "User deactivated.");
-                loadUsers(); // Refresh
-            } else {
-                JOptionPane.showMessageDialog(this, "Failed to deactivate user.");
-            }
         }
     }
 }
 
-
+        
