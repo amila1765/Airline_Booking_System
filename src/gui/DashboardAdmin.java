@@ -28,22 +28,21 @@ public class DashboardAdmin extends JFrame
         JLabel titleLabel = new JLabel("Welcome, " + user.getUsername(), SwingConstants.CENTER);
         add(titleLabel);
 
-        JButton viewUsersBtn = new JButton("👤 View All Users");
-        JButton createUserBtn = new JButton("➕ Create New User");
+        
+        JButton manageUsersButton = new JButton("👥 Manage Users");
         JButton viewBookingsBtn = new JButton("📄 View All Bookings");
         JButton reportsBtn = new JButton("📊 Generate Reports (optional)");
         JButton logoutBtn = new JButton("🚪 Logout");
 
         // Add to UI
-        add(viewUsersBtn);
-        add(createUserBtn);
+        
+        add(manageUsersButton);
         add(viewBookingsBtn);
         add(reportsBtn);
         add(logoutBtn);
 
         // Actions
-        viewUsersBtn.addActionListener(e -> new ViewUsersForm());
-        createUserBtn.addActionListener(e -> new SignUpForm());
+        manageUsersButton.addActionListener(e -> new ViewUsersForm());
         viewBookingsBtn.addActionListener(e -> new AllBookingsForm());
         reportsBtn.addActionListener(e -> JOptionPane.showMessageDialog(this, "Report generation coming soon."));
         logoutBtn.addActionListener(e -> 
