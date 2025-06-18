@@ -55,16 +55,6 @@ public class UpdateUserForm extends JFrame
         roleCombo.setSelectedItem(userToEdit.getRole());
         add(roleCombo);
 
-        JLabel statusLabel = new JLabel("Status:");
-        statusLabel.setBounds(30, 150, 80, 25);
-        add(statusLabel);
-
-        String[] statuses = {"Active", "Inactive"};
-        JComboBox<String> statusCombo = new JComboBox<>(statuses);
-        statusCombo.setBounds(120, 150, 160, 25);
-        statusCombo.setSelectedItem(userToEdit.getStatus());
-        add(statusCombo);
-
         JButton updateButton = new JButton("Update");
         updateButton.setBounds(120, 190, 100, 30);
         add(updateButton);
@@ -77,20 +67,22 @@ public class UpdateUserForm extends JFrame
             String newUsername = usernameField.getText().trim();
             String newEmail = emailField.getText().trim();
             String newRole = roleCombo.getSelectedItem().toString();
-            String newStatus = statusCombo.getSelectedItem().toString();
 
             userToEdit.setUsername(newUsername);
             userToEdit.setEmail(newEmail);
             userToEdit.setRole(newRole);
-            userToEdit.setStatus(newStatus);
-
-            if (UserService.updateUser(userToEdit)) {
+            
+            if (UserService.updateUser(userToEdit)) 
+            {
                 messageLabel.setText("✅ User updated.");
-                if (onUserUpdatedCallback != null) {
+                if (onUserUpdatedCallback != null) 
+                {
                     onUserUpdatedCallback.run();
                 }
                 dispose(); // Close form
-            } else {
+            } 
+            else 
+            {
                 messageLabel.setText("❌ Update failed.");
             }
         });
