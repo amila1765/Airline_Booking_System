@@ -22,7 +22,7 @@ public class ViewUsersForm extends JFrame
 
     public ViewUsersForm()
     {
-        setTitle("View All Users");
+        setTitle("👥 View All Users");
         setSize(800, 400);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -32,8 +32,7 @@ public class ViewUsersForm extends JFrame
         String[] columns = {"User ID", "Username", "Email", "Role", "Status"};
         tableModel = new DefaultTableModel(columns, 0);
         userTable = new JTable(tableModel);
-        JScrollPane scrollPane = new JScrollPane(userTable);
-        add(scrollPane, BorderLayout.CENTER);
+        add(new JScrollPane(userTable), BorderLayout.CENTER);
         
         // Action Panel
         JPanel actionPanel = new JPanel(new FlowLayout());
@@ -114,6 +113,7 @@ public class ViewUsersForm extends JFrame
                 String currentStatus = (String) tableModel.getValueAt(selectedRow, 4);
                 String newStatus = currentStatus.equals("Active") ? "Inactive" : "Active";
                 boolean success = UserService.updateUserStatus(userId, newStatus);
+                 
                 if (success)
                 {
                     JOptionPane.showMessageDialog(this, "🔄 Status updated to " + newStatus);
@@ -134,11 +134,12 @@ public class ViewUsersForm extends JFrame
 
     private void loadUsers() 
     {
-        tableModel.setRowCount(0);
+        tableModel.setRowCount(0);// clear existing rows
         List<User> users = UserService.getAllUsers();
         for (User u : users) 
         {
-            tableModel.addRow(new Object[]{
+            tableModel.addRow(new Object[]
+            {
                     u.getUserId(),
                     u.getUsername(),
                     u.getEmail(),
