@@ -125,9 +125,9 @@ public class UserService
     return userList;
 }
     
-    //update user(admin use)
-    public static boolean updateUserStatus(int userId, String newStatus) 
-    {
+    //update user status(admin use)
+   public static boolean updateUserStatus(int userId, String newStatus) 
+   {
     String sql = "UPDATE users SET status = ? WHERE user_id = ?";
     try (Connection conn = DBConnection.getInstance().getConnection();
          PreparedStatement stmt = conn.prepareStatement(sql)) 
@@ -135,11 +135,30 @@ public class UserService
 
         stmt.setString(1, newStatus);
         stmt.setInt(2, userId);
-        
+        return stmt.executeUpdate() > 0;
+
+    } catch (SQLException e) 
+    {
+        e.printStackTrace();
+        return false;
+    }
+}
+   // update usar info(admin use)
+   public static boolean updateUser(User user) 
+   {
+    String sql = "UPDATE users SET username = ?, email = ?, role = ? WHERE user_id = ?";
+    try (Connection conn = DBConnection.getInstance().getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) 
+    {
+        stmt.setString(1, user.getUsername());
+        stmt.setString(2, user.getEmail());
+        stmt.setString(3, user.getRole());
+        stmt.setInt(4, user.getUserId());
 
         return stmt.executeUpdate() > 0;
 
-    } catch (Exception e)
+    } 
+    catch (SQLException e) 
     {
         e.printStackTrace();
         return false;
