@@ -46,9 +46,9 @@ public class DashboardAdmin extends JFrame
         viewBookingsBtn.addActionListener(e -> new AllBookingsForm());
         reportsBtn.addActionListener(e -> JOptionPane.showMessageDialog(this, "Report generation coming soon."));
         logoutBtn.addActionListener(e -> 
-{
-            dispose();
-            new LoginForm();
+        {
+        dispose(); 
+            
         });
 
         setVisible(true);
