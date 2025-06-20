@@ -12,39 +12,51 @@ public class LoginForm extends JFrame
     public LoginForm() 
     {
         setTitle("Login");
-        setSize(350, 250);
+        setSize(400, 300);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(null);
 
         JLabel userLabel = new JLabel("Username:");
-        userLabel.setBounds(30, 30, 80, 25);
+        userLabel.setBounds(50, 40, 80, 25);
         add(userLabel);
 
         JTextField usernameField = new JTextField();
-        usernameField.setBounds(120, 30, 160, 25);
+        usernameField.setBounds(150, 40, 180, 25);
         add(usernameField);
 
         JLabel passLabel = new JLabel("Password:");
-        passLabel.setBounds(30, 70, 80, 25);
+        passLabel.setBounds(50, 80, 80, 25);
         add(passLabel);
 
         JPasswordField passwordField = new JPasswordField();
-        passwordField.setBounds(120, 70, 160, 25);
+        passwordField.setBounds(150, 80, 180, 25);
         add(passwordField);
 
+        // Login button
         JButton loginButton = new JButton("Login");
-        loginButton.setBounds(120, 110, 80, 30);
+        loginButton.setBounds(150, 120, 100, 30);
         add(loginButton);
         
-        JButton signUpButton = new JButton("Sign Up");
-        signUpButton.setBounds(210, 110, 80, 30);
-        add(signUpButton);
-        
+        // Message label
         JLabel messageLabel = new JLabel();
-        messageLabel.setBounds(30, 150, 300, 25);
+        messageLabel.setBounds(50, 160, 300, 25);
         add(messageLabel);
-
+        
+        // Don't have an account? Sign up
+        JLabel noAccountLabel = new JLabel("Don't have an account?");
+        noAccountLabel.setBounds(50, 200, 160, 25);
+        add(noAccountLabel);
+        
+        JButton goToSignUpBtn = new JButton("Sign Up");
+        goToSignUpBtn.setBounds(210, 200, 100, 25);
+        goToSignUpBtn.setBorderPainted(false);
+        goToSignUpBtn.setContentAreaFilled(false);
+        goToSignUpBtn.setForeground(Color.BLUE);
+        goToSignUpBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        add(goToSignUpBtn);
+        
+        // Login button action
         loginButton.addActionListener(e -> 
         {
             String username = usernameField.getText();
@@ -57,24 +69,21 @@ public class LoginForm extends JFrame
                 if (loggedInUser != null) 
                 {
                     messageLabel.setText("✅ Welcome, " + loggedInUser.getUsername());
-                    // Proceed to dashboard or user panel
-                    
-                    dispose(); // Close login form
 
+                // Navigate to dashboard
                 switch (loggedInUser.getRole()) 
                 {
                 case "Customer":
-                new DashboardCustomer(loggedInUser);
+                    new DashboardCustomer(loggedInUser);
                 break;
                 case "Operator":
-                new DashboardOperator(loggedInUser);
+                    new DashboardOperator(loggedInUser);
                 break;
                 case "Admin":
-                new DashboardAdmin(loggedInUser);
+                    new DashboardAdmin(loggedInUser);
                 break;
-                default:
-                JOptionPane.showMessageDialog(this, "Unknown user role.");
                 }
+                dispose(); // Close login form
                 }
                 else 
                 {
@@ -83,13 +92,18 @@ public class LoginForm extends JFrame
             } 
             catch (SQLException ex)
             {
-                ex.printStackTrace();
-                messageLabel.setText("❌ Database error." + ex.getMessage());
+               messageLabel.setText("❌ Database error." + ex.getMessage());
+               ex.printStackTrace();
             }
         });
-
-        signUpButton.addActionListener(e -> new SignUpForm());
-
+        
+        // Sign up action
+        goToSignUpBtn.addActionListener(e ->
+        {
+                new SignUpForm();
+                dispose();
+        });
+        
         setVisible(true);
     }
 }
