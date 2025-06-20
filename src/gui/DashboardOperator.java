@@ -19,7 +19,7 @@ public class DashboardOperator extends JFrame
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
-        JLabel welcomeLabel = new JLabel("👋 Welcome, " + user.getUsername() + " (Operator)");
+        JLabel welcomeLabel = new JLabel("👋 Welcome, " + user.getUsername());
         welcomeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         add(Box.createVerticalStrut(20));
         add(welcomeLabel);
@@ -33,13 +33,14 @@ public class DashboardOperator extends JFrame
         add(Box.createVerticalStrut(10));
 
         // Book for Customer (coming soon)
-        JButton bookFlightButton = new JButton("📦 Book for Customer (Coming soon)");
+        JButton bookFlightButton = new JButton("📦 Book for Customer");
         bookFlightButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        bookFlightButton.addActionListener(e -> new FlightSearchForm(user));
         add(bookFlightButton);
         add(Box.createVerticalStrut(10));
 
         // Generate Reports (coming soon)
-        JButton reportsButton = new JButton("📊 Generate Reports (Coming soon)");
+        JButton reportsButton = new JButton("📊 Generate Reports");
         reportsButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         add(reportsButton);
         add(Box.createVerticalStrut(10));
@@ -47,8 +48,8 @@ public class DashboardOperator extends JFrame
         // Logout
         JButton logoutButton = new JButton("🔓 Logout");
         logoutButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        logoutButton.addActionListener(e -> {
-            new LoginForm();
+        logoutButton.addActionListener(e -> 
+        {
             dispose();
         });
         
