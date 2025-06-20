@@ -44,7 +44,6 @@ public class DashboardCustomer extends JFrame
         logoutButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         logoutButton.addActionListener(e ->
         {
-            new LoginForm(); // return to login screen
             dispose();       // close dashboard
         });
         
