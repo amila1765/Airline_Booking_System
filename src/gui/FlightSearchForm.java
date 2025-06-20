@@ -19,26 +19,28 @@ public class FlightSearchForm extends JFrame
 {
     private User currentUser;
     private List<Flight> flightList; // to store search results
-    private JComboBox<String> originCombo;
-    private JComboBox<String> destinationCombo;
     private JTable flightTable;
     private DefaultTableModel tableModel;
+    private JComboBox<String> originCombo;
+    private JComboBox<String> destinationCombo;
 
     public FlightSearchForm(User user) 
     {
         this.currentUser = user;
         this.flightList = new ArrayList<>();
+        
         setTitle("Search Flights");
-        setSize(700, 400);
+        setSize(800, 450);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
         
          // Top panel for dropdowns and search
         JPanel topPanel = new JPanel(new FlowLayout());
+        
         originCombo = new JComboBox<>(new String[]{"1 - Colombo", "2 - London", "3 - Dubai"});
         destinationCombo = new JComboBox<>(new String[]{"1 - Colombo", "2 - London", "3 - Dubai"});
-        JButton searchButton = new JButton("Search Flights");
+        JButton searchButton = new JButton("🔍 Search Flights");
 
         topPanel.add(new JLabel("From:"));
         topPanel.add(originCombo);
@@ -48,8 +50,10 @@ public class FlightSearchForm extends JFrame
         add(topPanel, BorderLayout.NORTH);
         
          // Table and scroll pane
-        String[] columnNames = {"Flight ID", "Airplane ID", "Departure Time", "Arrival Time"};
-        tableModel = new DefaultTableModel(columnNames, 0);
+        tableModel = new DefaultTableModel(new String[]
+        {
+            "Flight ID(s)", "Airplane ID(s)", "Departure Time", "Arrival Time", "Route Type"
+        }, 0);
         flightTable = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(flightTable);
         add(scrollPane, BorderLayout.CENTER);
@@ -81,35 +85,59 @@ public class FlightSearchForm extends JFrame
             return;
         }
         
-        System.out.println("Searching flights from " + originId + " to " + destinationId);
-        flightList = FlightService.getFlightsByRoute(originId, destinationId);
+        // Direct flights
+        List<Flight> directFlights = FlightService.getFlightsByRoute(originId, destinationId);
+        for (Flight f : directFlights)
+        {
+            tableModel.addRow(new Object[]
+            {
+                f.getFlightId(),
+                f.getAirplaneId(),
+                f.getDepartureTime(),
+                f.getArrivalTime(),
+                "Direct"
+            });
+            flightList.add(f);
+        }
+
+        // Transit flights
+        List<List<Flight>> transitRoutes = FlightService.getTransitFlights(originId, destinationId);
+        for (List<Flight> route : transitRoutes) 
+        {
+            if (route.size() == 2)
+            {
+                Flight first = route.get(0);
+                Flight second = route.get(1);
+                String flightIds = first.getFlightId() + " -> " + second.getFlightId();
+                String airplaneIds = first.getAirplaneId() + " -> " + second.getAirplaneId();
+
+                tableModel.addRow(new Object[]{
+                    flightIds,
+                    airplaneIds,
+                    first.getDepartureTime(),
+                    second.getArrivalTime(),
+                    "Transit"
+                });
+
+                // You may choose to add both or just one combined object
+                // Storing just the second leg with combined info is okay if your BookingForm uses only one Flight object.
+                flightList.add(first); // Or use second or custom wrapper
+            }
+        }
 
         if (flightList.isEmpty()) 
         {
-            JOptionPane.showMessageDialog(this, "No flights found for the selected route.");
-        } 
-        else 
-        {
-            for (Flight flight : flightList) 
-            {
-                tableModel.addRow(new Object[]
-                {
-                        flight.getFlightId(),
-                        flight.getAirplaneId(),
-                        flight.getDepartureTime(),
-                        flight.getArrivalTime()
-                });
-            }
+            JOptionPane.showMessageDialog(this, "❌ No flights found.");
         }
     }
-    
+
     private void openBookingForm() 
     {
-        int selectedRow = flightTable.getSelectedRow();
-        if (selectedRow >= 0) {
-            Flight selectedFlight = flightList.get(selectedRow);
+        int row = flightTable.getSelectedRow();
+        if (row >= 0) {
+            Flight selectedFlight = flightList.get(row);
             new BookingForm(currentUser, selectedFlight);
-        }
+        } 
         else 
         {
             JOptionPane.showMessageDialog(this, "Please select a flight to book.");
