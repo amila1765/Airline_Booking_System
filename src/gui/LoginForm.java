@@ -6,11 +6,24 @@ import services.UserService;
 import javax.swing.*;
 import java.awt.*;
 import java.sql.SQLException;
+import java.util.function.Consumer;
 
 public class LoginForm extends JFrame 
 {
+    private Consumer<User> loginCallback; // Optional callback
+    private final Consumer<User> onLoginSuccess;
+    
+    // Default constructor
     public LoginForm() 
     {
+        this(null); // Call the overloaded constructor with null callback
+    }
+    
+     // Constructor with callback
+    public LoginForm(Consumer<User> onLoginSuccess) 
+    {
+        this.onLoginSuccess = onLoginSuccess ;
+
         setTitle("Login");
         setSize(400, 300);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -68,8 +81,12 @@ public class LoginForm extends JFrame
 
                 if (loggedInUser != null) 
                 {
-                    messageLabel.setText("✅ Welcome, " + loggedInUser.getUsername());
-
+                    // Callback to update HomeDashboard
+                    if (onLoginSuccess != null) 
+                    {
+                        onLoginSuccess.accept(loggedInUser);
+                    }
+                    
                 // Navigate to dashboard
                 switch (loggedInUser.getRole()) 
                 {
