@@ -1,12 +1,15 @@
 
-// File: gui/HomeDashboard.java
 package gui;
 
 import javax.swing.*;
 import java.awt.*;
+import models.User; // ensure this is imported
+import java.util.function.Consumer;
+
 
 public class HomeDashboard extends JFrame 
 {
+    private User loggedInUser = null;
 
     public HomeDashboard() 
     {
@@ -28,9 +31,29 @@ public class HomeDashboard extends JFrame
         headerPanel.add(Box.createHorizontalStrut(200)); // spacing
 
         JButton homeBtn = new JButton("Home");
+        
         JButton bookBtn = new JButton("Book Flight");
+        bookBtn.addActionListener(e -> 
+        {
+             if (loggedInUser == null) 
+             {
+                JOptionPane.showMessageDialog(this, "❗ Please log in first to book a flight.");
+             } 
+             else 
+             {
+                new FlightSearchForm(loggedInUser);
+             }
+        });
+
+        
         JButton loginBtn = new JButton("Login");
-        loginBtn.addActionListener(e -> new LoginForm());
+        loginBtn.addActionListener(e -> 
+        {
+            new LoginForm(user -> 
+            {
+                loggedInUser = user;
+            });
+        });
 
         JButton signupBtn = new JButton("Sign Up");
         signupBtn.addActionListener(e -> new SignUpForm());
