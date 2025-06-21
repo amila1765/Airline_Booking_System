@@ -136,7 +136,7 @@ public class FlightSearchForm extends JFrame
         int row = flightTable.getSelectedRow();
         if (row >= 0) {
             Flight selectedFlight = flightList.get(row);
-            new BookingForm(currentUser, selectedFlight);
+            new BookingForm(currentUser, List.of(selectedFlight));
         } 
         else 
         {
