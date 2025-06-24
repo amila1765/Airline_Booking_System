@@ -55,6 +55,10 @@ public class FlightSearchForm extends JFrame
             "Flight ID(s)", "Airplane ID(s)", "Departure Time", "Arrival Time", "Route Type"
         }, 0);
         flightTable = new JTable(tableModel);
+        
+        //Allow multiple rows selection
+        flightTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        
         JScrollPane scrollPane = new JScrollPane(flightTable);
         add(scrollPane, BorderLayout.CENTER);
         
@@ -119,9 +123,9 @@ public class FlightSearchForm extends JFrame
                     "Transit"
                 });
 
-                // You may choose to add both or just one combined object
-                // Storing just the second leg with combined info is okay if your BookingForm uses only one Flight object.
-                flightList.add(first); // Or use second or custom wrapper
+                //store both flights for booking
+                flightList.add(first);
+                flightList.add(second);
             }
         }
 
@@ -133,14 +137,22 @@ public class FlightSearchForm extends JFrame
 
     private void openBookingForm() 
     {
-        int row = flightTable.getSelectedRow();
-        if (row >= 0) {
-            Flight selectedFlight = flightList.get(row);
-            new BookingForm(currentUser, List.of(selectedFlight));
-        } 
-        else 
+        int[] selectedRows = flightTable.getSelectedRows(); //Multiple rows
+        if (selectedRows.length == 0) 
         {
-            JOptionPane.showMessageDialog(this, "Please select a flight to book.");
+            JOptionPane.showMessageDialog(this, "Please select at least one flight to book.");
+            return;
         }
+
+        List<Flight> selectedFlights = new ArrayList<>();
+        for (int row : selectedRows)
+        {
+            if (row < flightList.size())
+            {
+                selectedFlights.add(flightList.get(row));
+            }
+        }
+
+        new BookingForm(currentUser, selectedFlights); //Pass List<Flight>
     }
 }
