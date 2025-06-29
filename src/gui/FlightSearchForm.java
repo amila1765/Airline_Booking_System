@@ -59,10 +59,10 @@ public class FlightSearchForm extends JFrame
         //Allow multiple rows selection
         flightTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         
-        JScrollPane scrollPane = new JScrollPane(flightTable);
+         JScrollPane scrollPane = new JScrollPane(flightTable);
         add(scrollPane, BorderLayout.CENTER);
         
-        // Bottom panel for Booking
+        //Book Button
         JPanel bottomPanel = new JPanel();
         JButton bookButton = new JButton("Book Selected Flight");
         bottomPanel.add(bookButton);
